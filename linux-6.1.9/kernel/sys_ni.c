@@ -479,3 +479,6 @@ COND_SYSCALL(setuid16);
 
 /* restartable sequence */
 COND_SYSCALL(rseq);
+
+COND_SYSCALL(sec_read);
+COND_SYSCALL(sec_write);
