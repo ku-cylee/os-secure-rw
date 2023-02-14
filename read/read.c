@@ -35,6 +35,7 @@ int main(int argc, char **argv) {
     char *buf = memalign(getpagesize(), getpagesize());
     if (!buf) {
         fprintf(stderr, "Failed to create buffer (Error #%d)\n", errno);
+        close(fd);
         return -1;
     }
 
@@ -42,6 +43,7 @@ int main(int argc, char **argv) {
     if (lseek_result < 0) {
         fprintf(stderr, "Failed to seek to offset %d (Error #%d)\n", offset, errno);
         free(buf);
+        close(fd);
         return -1;
     }
 
@@ -49,12 +51,14 @@ int main(int argc, char **argv) {
     if (read_result < 0) {
         fprintf(stderr, "Failed to read the file with length %d (Error #%d)\n", length, errno);
         free(buf);
+        close(fd);
         return -1;
     }
 
     fprintf(stdout, "Read success: %d bytes\n", read_result);
 
     free(buf);
+    close(fd);
 
     return 0;
 }
