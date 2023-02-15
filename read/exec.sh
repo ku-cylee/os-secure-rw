@@ -12,10 +12,10 @@ fi
 
 echo 3 > /proc/sys/vm/drop_caches
 echo "Start time (ns): [$(date +%s%N)]"
-for idx in {1..$4}
+for idx in {1..100}
 do
     echo "Iterating #$idx"
-    ./read.out $1 $2 $3
+    ./read.out $1 $2 $3 $4 > /dev/null
 done
 
 echo "End   time (ns): [$(date +%s%N)]"

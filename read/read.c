@@ -9,28 +9,23 @@
 
 #include "errno.h"
 
-#define DIRECT_IO
-
-#ifdef DIRECT_IO
-#define OPEN_FLAG   O_RDONLY | O_DIRECT
-#else
-#define OPEN_FLAG   O_RDONLY
-#endif
-
 int main(int argc, char **argv) {
-    if (argc < 3) {
+    if (argc < 4) {
         fprintf(stderr, "Not enough parameters\n");
         return -1;
     }
 
-    int fd = open(argv[1], OPEN_FLAG);
+    int flags = O_RDONLY;
+    if (strcmp(argv[1], "direct") == 0) flags |= O_DIRECT;
+
+    int fd = open(argv[2], flags);
     if (fd < 0) {
-        fprintf(stderr, "Failed to open file %s (Error #%d)\n", argv[1], errno);
+        fprintf(stderr, "Failed to open file %s (Error #%d)\n", argv[2], errno);
         return -1;
     }
 
-    int offset = atoi(argv[2]);
-    int length = atoi(argv[3]);
+    int offset = atoi(argv[3]);
+    int length = atoi(argv[4]);
 
     char *buf = memalign(getpagesize(), getpagesize());
     if (!buf) {
